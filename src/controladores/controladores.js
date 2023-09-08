@@ -40,12 +40,8 @@ const listarContas = (req, res) => {
 const criarConta = (req, res) => {
     const { nome, cpf, data_nascimento, telefone, email, senha } = req.body;
 
-    const camposObrigatorios = ['nome', 'cpf', 'data_nascimento', 'telefone', 'email', 'senha'];
-
-    for (const campo of camposObrigatorios) {
-        if (!req.body[campo]) {
-            return res.status(400).json({ mensagem: 'O preenchimento de todos os campos são obrigatórios.' });
-        }
+    if (!nome || !cpf || !data_nascimento || !telefone || !email || !senha) {
+        return res.status(400).json({ mensagem: 'O preenchimento de todos os campos são obrigatórios.' });
     }
 
     const verificacoes = [
