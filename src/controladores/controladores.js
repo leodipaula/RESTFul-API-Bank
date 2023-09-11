@@ -71,7 +71,7 @@ const atualizarConta = (req, res) => {
     const { nome, cpf, data_nascimento, telefone, email, senha } = req.body;
     const { numeroConta } = req.params;
 
-    if (!nome || !cpf || !data_nascimento || !telefone || !email || !senha) {
+    if (!nome || !cpf || !data_nascimento || !telefone || !email || !senha || !numeroConta) {
         return res.status(400).json({ mensagem: 'O preenchimento de todos os campos são obrigatórios.' });
     }
 
@@ -240,7 +240,11 @@ const extrato = (req, res) => {
         return res.status(400).json({ mensagem: 'O número da conta e a senha são obrigatórios!' });
     }
 
-    verificarConta(numero_conta, res);
+    const clienteExistente = verificarConta(numero_conta, res);
+
+    if (clienteExistente.usuario.senha !== senha) {
+        return res.status(403).json({ mensagem: 'A senha informada está incorreta.' });
+    }
 
     const transacoes = {
         depositos: [],
